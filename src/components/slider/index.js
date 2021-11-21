@@ -18,8 +18,6 @@ function Slider(props) {
           pagination={{ clickable: true }}
           autoplay={true}
           loop={true}
-          onSwiper={swiper => console.log(swiper)}
-          onSlideChange={() => console.log("slide change")}
           className="swiper-wrapper"
         >
           {bannerList.map(slider => {
