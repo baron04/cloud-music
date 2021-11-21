@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet,NavLink } from "react-router-dom";
+import { Outlet, NavLink } from "react-router-dom";
 import { Top, Tab, TabItem } from "./style";
 
 function Home(props) {
@@ -11,17 +11,26 @@ function Home(props) {
         <span className="iconfont search">&#xe62b;</span>
       </Top>
       <Tab>
-        <NavLink to="/recommend" activeClassName="selected">
+        <NavLink
+          to="/recommend"
+          className={({ isActive }) => (isActive ? " selected" : "")}
+        >
           <TabItem>
             <span> 推荐 </span>
           </TabItem>
         </NavLink>
-        <NavLink to="/singers" activeClassName="selected">
+        <NavLink
+          to="/singers"
+          className={({ isActive }) => (isActive ? " selected" : "")}
+        >
           <TabItem>
             <span> 歌手 </span>
           </TabItem>
         </NavLink>
-        <NavLink to="/rank" activeClassName="selected">
+        <NavLink
+          to="/rank"
+          className={({ isActive }) => (isActive ? " selected" : "")}
+        >
           <TabItem>
             <span> 排行榜 </span>
           </TabItem>
