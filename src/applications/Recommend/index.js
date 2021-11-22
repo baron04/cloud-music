@@ -13,10 +13,6 @@ function Recommend(props) {
   const { getBannerDataDispatch, getRecommendListDataDispatch } = props;
 
   useEffect(() => {
-    // getBannerDataDispatch();
-    // getRecommendListDataDispatch();
-
-
     if (!bannerList.size){
       getBannerDataDispatch ();
     }
