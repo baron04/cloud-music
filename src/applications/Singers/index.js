@@ -3,6 +3,8 @@ import Horizen from "../../baseUI/horizen-item";
 import { categoryTypes, alphaTypes } from "../../api/config";
 import { NavContainer, ListContainer, List, ListItem } from "./style";
 import Scroll from "../../baseUI/scroll";
+import Loading from "../../baseUI/loading";
+
 import { connect } from "react-redux";
 import {
   getSingerList,
@@ -15,6 +17,8 @@ import {
   refreshMoreHotSingerList
 } from "./store/actionCreators";
 
+import LazyLoad, { forceCheck } from "react-lazyload";
+
 function Singers(props) {
   const {
     singerList,
@@ -23,7 +27,6 @@ function Singers(props) {
     pullDownLoading,
     pageCount
   } = props;
-  console.log(singerList);
 
   const {
     getHotSingerDispatch,
@@ -60,12 +63,23 @@ function Singers(props) {
           return (
             <ListItem key={item.accountId + "" + index}>
               <div className="img_wrapper">
-                <img
-                  src={`${item.picUrl}?param=300x300`}
-                  width="100%"
-                  height="100%"
-                  alt="music"
-                />
+                <LazyLoad
+                  placeholder={
+                    <img
+                      width="100%"
+                      height="100%"
+                      src={require("./singer.png")}
+                      alt="music"
+                    />
+                  }
+                >
+                  <img
+                    src={`${item.picUrl}?param=300x300`}
+                    width="100%"
+                    height="100%"
+                    alt="music"
+                  />
+                </LazyLoad>
               </div>
               <span className="name">{item.name}</span>
             </ListItem>
@@ -73,6 +87,14 @@ function Singers(props) {
         })}
       </List>
     );
+  };
+
+  const handlePullUp = () => {
+    pullUpRefreshDispatch(category, alpha, category === "", pageCount);
+  };
+
+  const handlePullDown = () => {
+    pullDownRefreshDispatch(category, alpha);
   };
 
   return (
@@ -92,7 +114,16 @@ function Singers(props) {
         ></Horizen>
       </NavContainer>
       <ListContainer>
-        <Scroll>{renderSingerList()}</Scroll>
+        <Scroll
+          pullUp={handlePullUp}
+          pullDown={handlePullDown}
+          pullUpLoading={pullUpLoading}
+          pullDownLoading={pullDownLoading}
+          onScroll={forceCheck}
+        >
+          {renderSingerList()}
+        </Scroll>
+        <Loading show={enterLoading}></Loading>
       </ListContainer>
     </div>
   );
