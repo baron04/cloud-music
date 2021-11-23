@@ -14,7 +14,7 @@ import {
   refreshMoreSingerList,
   changePullUpLoading,
   changePullDownLoading,
-  refreshMoreHotSingerList
+  refreshMoreHotSingerList,
 } from "./store/actionCreators";
 
 import LazyLoad, { forceCheck } from "react-lazyload";
@@ -25,14 +25,14 @@ function Singers(props) {
     enterLoading,
     pullUpLoading,
     pullDownLoading,
-    pageCount
+    pageCount,
   } = props;
 
   const {
     getHotSingerDispatch,
     updateDispatch,
     pullDownRefreshDispatch,
-    pullUpRefreshDispatch
+    pullUpRefreshDispatch,
   } = props;
 
   useEffect(() => {
@@ -45,12 +45,12 @@ function Singers(props) {
   let [category, setCategory] = useState("");
   let [alpha, setAlpha] = useState("");
 
-  let handleUpdateAlpha = val => {
+  let handleUpdateAlpha = (val) => {
     setAlpha(val);
     updateDispatch(category, val);
   };
 
-  let handleUpdateCatetory = val => {
+  let handleUpdateCatetory = (val) => {
     setCategory(val);
     updateDispatch(val, alpha);
   };
@@ -61,7 +61,7 @@ function Singers(props) {
       <List>
         {singerListJS.map((item, index) => {
           return (
-            <ListItem key={item.accountId + "" + index}>
+            <ListItem key={item.accountId + index}>
               <div className="img_wrapper">
                 <LazyLoad
                   placeholder={
@@ -103,13 +103,13 @@ function Singers(props) {
         <Horizen
           list={categoryTypes}
           title={"分类 (默认热门):"}
-          handleClick={val => handleUpdateCatetory(val)}
+          handleClick={(val) => handleUpdateCatetory(val)}
           oldVal={category}
         ></Horizen>
         <Horizen
           list={alphaTypes}
           title={"首字母:"}
-          handleClick={val => handleUpdateAlpha(val)}
+          handleClick={(val) => handleUpdateAlpha(val)}
           oldVal={alpha}
         ></Horizen>
       </NavContainer>
@@ -129,14 +129,14 @@ function Singers(props) {
   );
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   singerList: state.getIn(["singers", "singerList"]),
   enterLoading: state.getIn(["singers", "enterLoading"]),
   pullUpLoading: state.getIn(["singers", "pullUpLoading"]),
   pullDownLoading: state.getIn(["singers", "pullDownLoading"]),
-  pageCount: state.getIn(["singers", "pageCount"])
+  pageCount: state.getIn(["singers", "pageCount"]),
 });
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     getHotSingerDispatch() {
       dispatch(getHotSingerList());
@@ -165,7 +165,7 @@ const mapDispatchToProps = dispatch => {
       } else {
         dispatch(getSingerList(category, alpha));
       }
-    }
+    },
   };
 };
 
