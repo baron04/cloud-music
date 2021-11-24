@@ -2,8 +2,9 @@ import { GlobalStyle } from "./style";
 import { IconStyle } from "./assets/iconfont/iconfont";
 import { useRoutes } from "react-router-dom";
 import routes from "./routes/index.js";
-import { Provider} from 'react-redux'
-import store from './store'
+import { Provider } from "react-redux";
+import store from "./store";
+import { Data } from "./applications/Singers/data";
 
 function App() {
   const element = useRoutes(routes);
@@ -11,7 +12,7 @@ function App() {
     <Provider store={store}>
       <GlobalStyle></GlobalStyle>
       <IconStyle></IconStyle>
-      {element}
+      <Data>{element}</Data>
     </Provider>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Horizen from "../../baseUI/horizen-item";
 import { categoryTypes, alphaTypes } from "../../api/config";
 import { NavContainer, ListContainer, List, ListItem } from "./style";
@@ -14,10 +14,12 @@ import {
   refreshMoreSingerList,
   changePullUpLoading,
   changePullDownLoading,
-  refreshMoreHotSingerList,
+  refreshMoreHotSingerList
 } from "./store/actionCreators";
 
 import LazyLoad, { forceCheck } from "react-lazyload";
+
+import { CategoryDataContext, CHANGE_ALPHA, CHANGE_CATEGORY } from "./data";
 
 function Singers(props) {
   const {
@@ -25,35 +27,50 @@ function Singers(props) {
     enterLoading,
     pullUpLoading,
     pullDownLoading,
-    pageCount,
+    pageCount
   } = props;
 
   const {
     getHotSingerDispatch,
     updateDispatch,
     pullDownRefreshDispatch,
-    pullUpRefreshDispatch,
+    pullUpRefreshDispatch
   } = props;
 
   useEffect(() => {
-    getHotSingerDispatch();
-    // eslint-disable-next-line
+    if (!singerList.size) {
+      getHotSingerDispatch();
+    }
   }, []);
 
   const singerListJS = singerList ? singerList.toJS() : [];
 
-  let [category, setCategory] = useState("");
-  let [alpha, setAlpha] = useState("");
+  // let [category, setCategory] = useState("");
+  // let [alpha, setAlpha] = useState("");
 
-  let handleUpdateAlpha = (val) => {
-    setAlpha(val);
+  const { data, dispatch } = useContext(CategoryDataContext);
+  // 拿到 category 和 alpha 的值
+  const { category, alpha } = data.toJS();
+
+  let handleUpdateAlpha = val => {
+    dispatch({ type: CHANGE_ALPHA, data: val });
     updateDispatch(category, val);
   };
 
-  let handleUpdateCatetory = (val) => {
-    setCategory(val);
+  let handleUpdateCatetory = val => {
+    dispatch({ type: CHANGE_CATEGORY, data: val });
     updateDispatch(val, alpha);
   };
+
+  // let handleUpdateAlpha = val => {
+  //   setAlpha(val);
+  //   updateDispatch(category, val);
+  // };
+
+  // let handleUpdateCatetory = val => {
+  //   setCategory(val);
+  //   updateDispatch(val, alpha);
+  // };
 
   // 渲染函数，返回歌手列表
   const renderSingerList = () => {
@@ -61,7 +78,7 @@ function Singers(props) {
       <List>
         {singerListJS.map((item, index) => {
           return (
-            <ListItem key={item.accountId + index}>
+            <ListItem key={index}>
               <div className="img_wrapper">
                 <LazyLoad
                   placeholder={
@@ -103,13 +120,13 @@ function Singers(props) {
         <Horizen
           list={categoryTypes}
           title={"分类 (默认热门):"}
-          handleClick={(val) => handleUpdateCatetory(val)}
+          handleClick={val => handleUpdateCatetory(val)}
           oldVal={category}
         ></Horizen>
         <Horizen
           list={alphaTypes}
           title={"首字母:"}
-          handleClick={(val) => handleUpdateAlpha(val)}
+          handleClick={val => handleUpdateAlpha(val)}
           oldVal={alpha}
         ></Horizen>
       </NavContainer>
@@ -129,14 +146,14 @@ function Singers(props) {
   );
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   singerList: state.getIn(["singers", "singerList"]),
   enterLoading: state.getIn(["singers", "enterLoading"]),
   pullUpLoading: state.getIn(["singers", "pullUpLoading"]),
   pullDownLoading: state.getIn(["singers", "pullDownLoading"]),
-  pageCount: state.getIn(["singers", "pageCount"]),
+  pageCount: state.getIn(["singers", "pageCount"])
 });
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     getHotSingerDispatch() {
       dispatch(getHotSingerList());
@@ -165,7 +182,7 @@ const mapDispatchToProps = (dispatch) => {
       } else {
         dispatch(getSingerList(category, alpha));
       }
-    },
+    }
   };
 };
 
