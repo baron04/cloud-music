@@ -68,7 +68,7 @@ function Singers(props) {
                     <img
                       width="100%"
                       height="100%"
-                      src={require("./singer.png")}
+                      src={require("./singer.png").default}
                       alt="music"
                     />
                   }

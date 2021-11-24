@@ -18,7 +18,7 @@ function RecommendList(props) {
                     <img
                       width="100%"
                       height="100%"
-                      src={require("./music.png")}
+                      src={require("./music.png").default}
                       alt="music"
                     />
                   }
