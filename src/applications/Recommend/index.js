@@ -8,16 +8,19 @@ import * as actionTypes from "./store/actionCreators";
 import { forceCheck } from "react-lazyload";
 import Loading from "../../baseUI/loading";
 
+import { Routes, Route } from "react-router-dom";
+import Album from "../Album";
+
 function Recommend(props) {
   const { bannerList, recommendList, enterLoading } = props;
   const { getBannerDataDispatch, getRecommendListDataDispatch } = props;
 
   useEffect(() => {
-    if (!bannerList.size){
-      getBannerDataDispatch ();
+    if (!bannerList.size) {
+      getBannerDataDispatch();
     }
-    if (!recommendList.size){
-      getRecommendListDataDispatch ();
+    if (!recommendList.size) {
+      getRecommendListDataDispatch();
     }
     // eslint-disable-next-line
   }, []);
@@ -34,27 +37,30 @@ function Recommend(props) {
         </div>
       </Scroll>
       {enterLoading ? <Loading></Loading> : null}
+      <Routes>
+        <Route path=":id" element={<Album />} />
+      </Routes>
     </Content>
   );
 }
 
 // 映射 Redux 全局的 state 到组件的 props 上
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   // 不要在这里将数据 toJS
   // 不然每次 diff 比对 props 的时候都是不一样的引用，还是导致不必要的重渲染，属于滥用 immutable
   bannerList: state.getIn(["recommend", "bannerList"]),
   recommendList: state.getIn(["recommend", "recommendList"]),
-  enterLoading: state.getIn(["recommend", "enterLoading"]),
+  enterLoading: state.getIn(["recommend", "enterLoading"])
 });
 // 映射 dispatch 到 props 上
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     getBannerDataDispatch() {
       dispatch(actionTypes.getBannerList());
     },
     getRecommendListDataDispatch() {
       dispatch(actionTypes.getRecommendList());
-    },
+    }
   };
 };
 

@@ -5,8 +5,8 @@ import { filterIndex, filterIdx } from "../../api/utils";
 import { Container, List, ListItem, SongList, EnterLoading } from "./style";
 import Scroll from "../../baseUI/scroll";
 import Loading from "../../baseUI/loading";
-import { useRoutes } from "react-router-dom";
 
+import { useRoutes } from "react-router-dom";
 import routes from "../../routes/index.js";
 
 function Rank(props) {

@@ -5,6 +5,7 @@ import Home from "../applications/Home";
 import Recommend from "../applications/Recommend";
 import Singers from "../applications/Singers";
 import Rank from "../applications/Rank";
+import Album from "../applications/Album";
 
 const routes = [
   // These are the same as the props you provide to <Route>
@@ -12,7 +13,16 @@ const routes = [
     path: "/",
     element: <Home />,
     children: [
-      { path: "recommend", element: <Recommend /> },
+      {
+        path: "recommend/*",
+        element: <Recommend />,
+        children: [
+          {
+            path: ":id",
+            element: <Album />
+          }
+        ]
+      },
       { path: "singers", element: <Singers /> },
       { path: "rank/*", element: <Rank /> },
       // Not found routes work as you'd expect
