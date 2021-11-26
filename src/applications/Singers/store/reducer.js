@@ -9,7 +9,7 @@ const defaultState = fromJS({
   pageCount: 0, //这里是当前页数，我们即将实现分页功能
 });
 
-export default (state = defaultState, action) => {
+const reducer = (state = defaultState, action) => {
   switch (action.type) {
     case actionTypes.CHANGE_SINGER_LIST:
       return state.set("singerList", action.data);
@@ -25,3 +25,5 @@ export default (state = defaultState, action) => {
       return state;
   }
 };
+
+export default reducer;

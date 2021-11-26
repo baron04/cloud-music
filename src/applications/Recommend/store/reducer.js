@@ -7,7 +7,7 @@ const defaultState = fromJS({
   enterLoading: true
 });
 
-export default (state = defaultState, action) => {
+const reducer = (state = defaultState, action) => {
   switch (action.type) {
     case actionTypes.CHANGE_BANNER:
       return state.set("bannerList", action.data);
@@ -19,3 +19,5 @@ export default (state = defaultState, action) => {
       return state;
   }
 };
+
+export default reducer;

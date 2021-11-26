@@ -4,7 +4,7 @@ import {
   useEffect,
   useRef,
   useImperativeHandle,
-  useMemo,
+  useMemo
 } from "react";
 import PropTypes from "prop-types";
 import BScroll from "better-scroll";
@@ -49,7 +49,7 @@ const Scroll = forwardRef((props, ref) => {
     pullUpLoading,
     pullDownLoading,
     bounceTop,
-    bounceBottom,
+    bounceBottom
   } = props;
   const { pullUp, pullDown, onScroll } = props;
 
@@ -66,13 +66,14 @@ const Scroll = forwardRef((props, ref) => {
       click: click,
       bounce: {
         top: bounceTop,
-        bottom: bounceBottom,
-      },
+        bottom: bounceBottom
+      }
     });
     setBScroll(scroll);
     return () => {
       setBScroll(null);
     };
+    // eslint-disable-next-line
   }, []);
 
   let pullUpDebounce = useMemo(() => {
@@ -94,7 +95,7 @@ const Scroll = forwardRef((props, ref) => {
 
   useEffect(() => {
     if (!bScroll || !onScroll) return;
-    bScroll.on("scroll", (scroll) => {
+    bScroll.on("scroll", scroll => {
       onScroll(scroll);
     });
     return () => {
@@ -122,7 +123,7 @@ const Scroll = forwardRef((props, ref) => {
   // 判断用户的下拉动作
   useEffect(() => {
     if (!bScroll || !pullDown) return;
-    const handlePullDown = (pos) => {
+    const handlePullDown = pos => {
       //判断用户的下拉动作
       if (pos.y > 50) {
         pullDownDebounce();
@@ -154,7 +155,7 @@ const Scroll = forwardRef((props, ref) => {
       if (bScroll) {
         return bScroll;
       }
-    },
+    }
   }));
 
   return (
@@ -182,7 +183,7 @@ Scroll.propTypes = {
   pullUpLoading: PropTypes.bool, // 是否显示上拉 loading 动画
   pullDownLoading: PropTypes.bool, // 是否显示下拉 loading 动画
   bounceTop: PropTypes.bool, // 是否支持向上吸顶
-  bounceBottom: PropTypes.bool, // 是否支持向下吸底
+  bounceBottom: PropTypes.bool // 是否支持向下吸底
 };
 
 Scroll.defaultProps = {
@@ -195,7 +196,7 @@ Scroll.defaultProps = {
   pullUp: null,
   pullDown: null,
   bounceTop: true,
-  bounceBottom: true,
+  bounceBottom: true
 };
 
 export default Scroll;

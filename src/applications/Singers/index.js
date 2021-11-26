@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import Horizen from "../../baseUI/horizen-item";
 import { categoryTypes, alphaTypes } from "../../api/config";
 import { NavContainer, ListContainer, List, ListItem } from "./style";
@@ -41,6 +41,7 @@ function Singers(props) {
     if (!singerList.size) {
       getHotSingerDispatch();
     }
+    // eslint-disable-next-line
   }, []);
 
   const singerListJS = singerList ? singerList.toJS() : [];

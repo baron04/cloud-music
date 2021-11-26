@@ -6,7 +6,7 @@ import Recommend from "../applications/Recommend";
 import Singers from "../applications/Singers";
 import Rank from "../applications/Rank";
 
-export default [
+const routes = [
   // These are the same as the props you provide to <Route>
   {
     path: "/",
@@ -14,9 +14,11 @@ export default [
     children: [
       { path: "recommend", element: <Recommend /> },
       { path: "singers", element: <Singers /> },
-      { path: "rank", element: <Rank /> },
+      { path: "rank/*", element: <Rank /> },
       // Not found routes work as you'd expect
-      { path: "*", element: <Navigate to="/recommend" /> },
-    ],
-  },
+      { path: "*", element: <Navigate to="/recommend" /> }
+    ]
+  }
 ];
+
+export default routes;
