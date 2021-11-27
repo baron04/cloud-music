@@ -1,6 +1,7 @@
 import React from "react";
 import { Outlet, NavLink } from "react-router-dom";
 import { Top, Tab, TabItem } from "./style";
+import Player from "../Player";
 
 function Home(props) {
   return (
@@ -37,6 +38,7 @@ function Home(props) {
         </NavLink>
       </Tab>
       <Outlet />
+      <Player></Player>
     </div>
   );
 }
