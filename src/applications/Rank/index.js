@@ -6,12 +6,10 @@ import { Container, List, ListItem, SongList, EnterLoading } from "./style";
 import Scroll from "../../baseUI/scroll";
 import Loading from "../../baseUI/loading";
 
-import { useRoutes } from "react-router-dom";
-import routes from "../../routes/index.js";
+import { useNavigate, Routes, Route } from "react-router-dom";
+import Album from "../Album";
 
 function Rank(props) {
-  const element = useRoutes(routes);
-
   const { rankList: list, loading } = props;
 
   const { getRankListDataDispatch } = props;
@@ -26,12 +24,15 @@ function Rank(props) {
     // eslint-disable-next-line
   }, []);
 
-  const enterDetail = name => {
-    const idx = filterIdx(name);
-    if (idx === null) {
-      console.log("暂无相关数据");
-      return;
-    }
+  let navigate = useNavigate();
+
+  const enterDetail = detail => {
+    // const idx = filterIdx(detail.name);
+    // if (idx === null) {
+    //   console.log("暂无相关数据");
+    //   return;
+    // }
+    navigate(`/rank/${detail.id}`);
   };
 
   // 这是渲染榜单列表函数，传入 global 变量来区分不同的布局方式
@@ -43,7 +44,7 @@ function Rank(props) {
             <ListItem
               key={index}
               tracks={item.tracks}
-              onClick={() => enterDetail(item.name)}
+              onClick={() => enterDetail(item)}
             >
               <div className="img_wrapper">
                 <img src={item.coverImgUrl} alt="" />
@@ -96,7 +97,9 @@ function Rank(props) {
           ) : null}
         </div>
       </Scroll>
-      {element}
+      <Routes>
+        <Route path=":id" element={<Album />} />
+      </Routes>
     </Container>
   );
 }

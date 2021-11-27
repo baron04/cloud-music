@@ -23,7 +23,7 @@ function Album(props) {
 
   const handleBack = useCallback(() => {
     setShowStatus(false);
-  });
+  },[]);
 
   const params = useParams();
   const id = params.id;

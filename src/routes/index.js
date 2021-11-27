@@ -13,7 +13,7 @@ const routes = [
     path: "/",
     element: <Home />,
     children: [
-      { path: "/", element: <Navigate to="/recommend" /> },
+      { path: "", element: <Navigate to="/recommend" /> },
       {
         path: "recommend/*",
         element: <Recommend />,
@@ -25,7 +25,16 @@ const routes = [
         ]
       },
       { path: "singers", element: <Singers /> },
-      { path: "rank/*", element: <Rank /> },
+      {
+        path: "rank/*",
+        element: <Rank />,
+        children: [
+          {
+            path: ":id",
+            element: <Album />
+          }
+        ]
+      },
       // Not found routes work as you'd expect
       { path: "*", element: <Navigate to="/recommend" /> }
     ]
