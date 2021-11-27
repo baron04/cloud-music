@@ -11,7 +11,7 @@ import { getAlbumList, changeEnterLoading } from "./store/actionCreators";
 import { isEmptyObject } from "../../api/utils";
 import Loading from "../../baseUI/loading";
 
-export const HEADER_HEIGHT = 45;
+import { HEADER_HEIGHT } from "./../../api/config";
 
 function Album(props) {
   const [showStatus, setShowStatus] = useState(true);
