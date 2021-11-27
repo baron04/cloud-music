@@ -13,6 +13,7 @@ const routes = [
     path: "/",
     element: <Home />,
     children: [
+      { path: "/", element: <Navigate to="/recommend" /> },
       {
         path: "recommend/*",
         element: <Recommend />,
