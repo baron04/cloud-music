@@ -6,6 +6,7 @@ import Recommend from "../application/Recommend";
 import Singers from "../application/Singers";
 import Rank from "../application/Rank";
 import Album from "../application/Album";
+import Singer from "../application/Singer";
 
 const routes = [
   // These are the same as the props you provide to <Route>
@@ -24,7 +25,16 @@ const routes = [
           }
         ]
       },
-      { path: "singers", element: <Singers /> },
+      {
+        path: "singers/*",
+        element: <Singers />,
+        routes: [
+          {
+            path: "/singers/:id",
+            component: Singer
+          }
+        ]
+      },
       {
         path: "rank/*",
         element: <Rank />,

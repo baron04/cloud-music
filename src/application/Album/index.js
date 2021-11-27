@@ -23,7 +23,7 @@ function Album(props) {
 
   const handleBack = useCallback(() => {
     setShowStatus(false);
-  },[]);
+  }, []);
 
   const params = useParams();
   const id = params.id;
@@ -69,7 +69,7 @@ function Album(props) {
           <div className="play_count">
             <i className="iconfont play">&#xe885;</i>
             <span className="count">
-              {Math.floor(currentAlbum.subscribedCount / 1000) / 10} 万{" "}
+              {Math.floor(currentAlbum.subscribedCount / 1000) / 10} 万
             </span>
           </div>
         </div>
@@ -116,8 +116,7 @@ function Album(props) {
           <div className="play_all">
             <i className="iconfont">&#xe6e3;</i>
             <span>
-              {" "}
-              播放全部{" "}
+              播放全部
               <span className="sum">(共 {currentAlbum.tracks.length} 首)</span>
             </span>
           </div>

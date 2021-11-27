@@ -21,6 +21,9 @@ import LazyLoad, { forceCheck } from "react-lazyload";
 
 import { CategoryDataContext, CHANGE_ALPHA, CHANGE_CATEGORY } from "./data";
 
+import { useNavigate, Routes, Route } from "react-router-dom";
+import Singer from "../Singer";
+
 function Singers(props) {
   const {
     singerList,
@@ -73,13 +76,23 @@ function Singers(props) {
   //   updateDispatch(val, alpha);
   // };
 
+  let navigate = useNavigate();
+  const enterDetail = id => {
+    navigate(`/singers/${id}`);
+  };
+
   // 渲染函数，返回歌手列表
   const renderSingerList = () => {
     return (
       <List>
         {singerListJS.map((item, index) => {
           return (
-            <ListItem key={index}>
+            <ListItem
+              key={index}
+              onClick={() => {
+                enterDetail(item.id);
+              }}
+            >
               <div className="img_wrapper">
                 <LazyLoad
                   placeholder={
@@ -143,6 +156,9 @@ function Singers(props) {
         </Scroll>
         <Loading show={enterLoading}></Loading>
       </ListContainer>
+      <Routes>
+        <Route path=":id" element={<Singer />} />
+      </Routes>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { getRankList } from "./store";
-import { filterIndex, filterIdx } from "../../api/utils";
+import { filterIndex } from "../../api/utils";
 import { Container, List, ListItem, SongList, EnterLoading } from "./style";
 import Scroll from "../../baseUI/scroll";
 import Loading from "../../baseUI/loading";
@@ -81,13 +81,11 @@ function Rank(props) {
       <Scroll>
         <div>
           <h1 className="offical" style={displayStyle}>
-            {" "}
-            官方榜{" "}
+            官方榜
           </h1>
           {renderRankList(officialList)}
           <h1 className="global" style={displayStyle}>
-            {" "}
-            全球榜{" "}
+            全球榜
           </h1>
           {renderRankList(globalList, true)}
           {loading ? (
