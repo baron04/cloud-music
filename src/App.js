@@ -4,7 +4,7 @@ import { useRoutes } from "react-router-dom";
 import routes from "./routes/index.js";
 import { Provider } from "react-redux";
 import store from "./store";
-import { Data } from "./applications/Singers/data";
+import { Data } from "./application/Singers/data";
 
 function App() {
   const element = useRoutes(routes);

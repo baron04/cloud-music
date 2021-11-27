@@ -1,11 +1,11 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 
-import Home from "../applications/Home";
-import Recommend from "../applications/Recommend";
-import Singers from "../applications/Singers";
-import Rank from "../applications/Rank";
-import Album from "../applications/Album";
+import Home from "../application/Home";
+import Recommend from "../application/Recommend";
+import Singers from "../application/Singers";
+import Rank from "../application/Rank";
+import Album from "../application/Album";
 
 const routes = [
   // These are the same as the props you provide to <Route>
