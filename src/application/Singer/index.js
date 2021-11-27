@@ -10,12 +10,16 @@ import {
 import Header from "../../baseUI/header/index";
 import Scroll from "../../baseUI/scroll";
 import SongsList from "../SongsList";
+import Loading from "./../../baseUI/loading/index";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { HEADER_HEIGHT } from "./../../api/config";
 
-function Singer() {
+import { connect } from "react-redux";
+import { getSingerInfo, changeEnterLoading } from "./store/actionCreators";
+
+function Singer(props) {
   const [showStatus, setShowStatus] = useState(true);
   const navigate = useNavigate();
 
@@ -30,8 +34,12 @@ function Singer() {
 
   // 往上偏移的尺寸，露出圆角
   const OFFSET = 5;
+  const params = useParams();
 
   useEffect(() => {
+    const id = params.id;
+    getSingerDataDispatch(id);
+
     let h = imageWrapper.current.offsetHeight;
     songScrollWrapper.current.style.top = `${h - OFFSET}px`;
     initialHeight.current = h;
@@ -45,31 +53,14 @@ function Singer() {
     setShowStatus(false);
   }, []);
 
-  const artist = {
-    picUrl:
-      "https://p2.music.126.net/W__FCWFiyq0JdPtuLJoZVQ==/109951163765026271.jpg",
-    name: "薛之谦",
-    hotSongs: [
-      {
-        name: "我好像在哪见过你",
-        ar: [{ name: "薛之谦" }],
-        al: {
-          name: "薛之谦专辑"
-        }
-      },
-      {
-        name: "我好像在哪见过你",
-        ar: [{ name: "薛之谦" }],
-        al: {
-          name: "薛之谦专辑"
-        }
-      }
-      // 省略 20 条
-    ]
-  };
+  const { artist: immutableArtist, songs: immutableSongs, loading } = props;
+
+  const { getSingerDataDispatch } = props;
+
+  const artist = immutableArtist.toJS();
+  const songs = immutableSongs.toJS();
 
   const handleScroll = useCallback(pos => {
-    console.log(pos);
     let height = initialHeight.current;
     const newY = pos.y;
     const imageDOM = imageWrapper.current;
@@ -133,12 +124,30 @@ function Singer() {
         <BgLayer ref={layer}></BgLayer>
         <SongListWrapper ref={songScrollWrapper}>
           <Scroll ref={songScroll} onScroll={handleScroll}>
-            <SongsList songs={artist.hotSongs} showCollect={false}></SongsList>
+            <SongsList songs={songs} showCollect={false}></SongsList>
           </Scroll>
         </SongListWrapper>
+        {loading ? <Loading></Loading> : null}
       </Container>
     </CSSTransition>
   );
 }
 
-export default React.memo(Singer);
+// 映射 Redux 全局的 state 到组件的 props 上
+const mapStateToProps = state => ({
+  artist: state.getIn(["singerInfo", "artist"]),
+  songs: state.getIn(["singerInfo", "songsOfArtist"]),
+  loading: state.getIn(["singerInfo", "loading"])
+});
+// 映射 dispatch 到 props 上
+const mapDispatchToProps = dispatch => {
+  return {
+    getSingerDataDispatch(id) {
+      dispatch(changeEnterLoading(true));
+      dispatch(getSingerInfo(id));
+    }
+  };
+};
+
+// 将 ui 组件包装成容器组件
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(Singer));
