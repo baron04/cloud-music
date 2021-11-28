@@ -39,6 +39,7 @@ const SongsList = React.forwardRef((props, refs) => {
       </div>
     );
   };
+
   return (
     <SongList ref={refs} showBackground={props.showBackground}>
       <div className="first_line">
