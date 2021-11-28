@@ -4,13 +4,13 @@ import { CSSTransition } from "react-transition-group";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../../baseUI/header/index";
 import Scroll from "../../baseUI/scroll/index";
-import { getName, getCount } from "../../api/utils";
 import style from "../../assets/global-style";
 import { connect } from "react-redux";
 import { getAlbumList, changeEnterLoading } from "./store/actionCreators";
 import { isEmptyObject } from "../../api/utils";
 import Loading from "../../baseUI/loading";
 import SongsList from "../SongsList";
+import MusicNote from "../../baseUI/music-note/index";
 
 import { HEADER_HEIGHT } from "./../../api/config";
 
@@ -110,6 +110,13 @@ function Album(props) {
     );
   };
 
+  // 音符陨落动画
+  const musicNoteRef = useRef();
+
+  const musicAnimation = (x, y) => {
+    musicNoteRef.current.startAnimation({ x, y });
+  };
+
   return (
     <CSSTransition
       in={showStatus}
@@ -137,12 +144,14 @@ function Album(props) {
                 collectCount={currentAlbum.subscribedCount}
                 showCollect={true}
                 showBackground={true}
+                musicAnimation={musicAnimation}
               ></SongsList>
             </div>
           </Scroll>
         ) : null}
 
         {enterLoading ? <Loading></Loading> : null}
+        <MusicNote ref={musicNoteRef}></MusicNote>
       </Container>
     </CSSTransition>
   );

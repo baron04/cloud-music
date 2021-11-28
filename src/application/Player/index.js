@@ -50,10 +50,6 @@ function Player(props) {
   const [preSong, setPreSong] = useState({});
 
   useEffect(() => {
-    changeCurrentIndexDispatch(0);
-  }, []);
-
-  useEffect(() => {
     if (
       !playList.length ||
       currentIndex === -1 ||
@@ -71,6 +67,8 @@ function Player(props) {
     togglePlayingDispatch(true); //播放状态
     setCurrentTime(0); //从头开始播放
     setDuration((current.dt / 1000) | 0); //时长
+
+    //eslint-disable-next-line
   }, [playList, currentIndex]);
 
   //目前播放时间
