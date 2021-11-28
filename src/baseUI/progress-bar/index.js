@@ -3,6 +3,8 @@ import styled from "styled-components";
 import style from "../../assets/global-style";
 import { prefixStyle } from "./../../api/utils";
 
+const transform = prefixStyle("transform");
+
 const ProgressBarWrapper = styled.div`
   height: 30px;
   .bar-inner {
@@ -37,6 +39,7 @@ const ProgressBarWrapper = styled.div`
 `;
 
 function ProgressBar(props) {
+  const { percent } = props;
   // 取出回调函数
   const { percentChange } = props;
 
@@ -46,6 +49,19 @@ function ProgressBar(props) {
   const [touch, setTouch] = useState({});
 
   const progressBtnWidth = 16;
+
+  //监听percent
+  useEffect(() => {
+    if (percent >= 0 && percent <= 1 && !touch.initiated) {
+      const barWidth = progressBar.current.clientWidth - progressBtnWidth;
+      const offsetWidth = percent * barWidth;
+      progress.current.style.width = `${offsetWidth}px`;
+      progressBtn.current.style[
+        transform
+      ] = `translate3d(${offsetWidth}px, 0, 0)`;
+    }
+    // eslint-disable-next-line
+  }, [percent]);
 
   // 处理进度条的偏移
   const _offset = offsetWidth => {
