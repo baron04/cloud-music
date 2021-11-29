@@ -25,7 +25,7 @@ const SearchBoxWrapper = styled.div`
     font-size: ${style["font-size-m"]};
     outline: none;
     border: none;
-    border-radius: 0;/*解决ios上输入框圆角问题*/
+    border-radius: 0; /*解决ios上输入框圆角问题*/
     border-bottom: 1px solid ${style["border-color"]};
     &::placeholder {
       color: ${style["font-color-light"]};
@@ -50,6 +50,13 @@ const SearchBox = (props) => {
   useEffect(() => {
     queryRef.current.focus();
   }, []);
+
+  useEffect(() => {
+    if (newQuery !== query) {
+      setQuery(newQuery);
+    }
+    // eslint-disable-next-line
+  }, [newQuery]);
 
   // 监听 input 框的内容
   const handleChange = (e) => {

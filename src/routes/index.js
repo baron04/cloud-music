@@ -50,6 +50,10 @@ const routes = [
         path: "/search",
         element: <Search />,
       },
+      {
+        path: "album/:id",
+        element: <Album />,
+      },
       // Not found routes work as you'd expect
       { path: "*", element: <Navigate to="/recommend" /> },
     ],
