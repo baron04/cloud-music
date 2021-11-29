@@ -1,13 +1,21 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { Navigate } from "react-router-dom";
 
 import Home from "../application/Home";
-import Recommend from "../application/Recommend";
-import Singers from "../application/Singers";
-import Rank from "../application/Rank";
-import Album from "../application/Album";
-import Singer from "../application/Singer";
-import Search from "../application/Search";
+const RecommendComponent = lazy(() => import("../application/Recommend/"));
+const SingersComponent = lazy(() => import("../application/Singers/"));
+const RankComponent = lazy(() => import("../application/Rank/"));
+const AlbumComponent = lazy(() => import("../application/Album/"));
+const SingerComponent = lazy(() => import("./../application/Singer/"));
+const SearchComponent = lazy(() => import("./../application/Search/"));
+
+const SuspenseComponent = (Component) => {
+  return (
+    <Suspense fallback={null}>
+      <Component/>
+    </Suspense>
+  );
+};
 
 const routes = [
   // These are the same as the props you provide to <Route>
@@ -18,41 +26,45 @@ const routes = [
       { path: "", element: <Navigate to="/recommend" /> },
       {
         path: "recommend/*",
-        element: <Recommend />,
+        element: (
+          <Suspense fallback={null}>
+            <RecommendComponent />
+          </Suspense>
+        ),
         children: [
           {
             path: ":id",
-            element: <Album />,
+            element: SuspenseComponent(AlbumComponent),
           },
         ],
       },
       {
         path: "singers/*",
-        element: <Singers />,
+        element: SuspenseComponent(SingersComponent),
         routes: [
           {
             path: "/singers/:id",
-            component: Singer,
+            component: SuspenseComponent(SingerComponent),
           },
         ],
       },
       {
         path: "rank/*",
-        element: <Rank />,
+        element: SuspenseComponent(RankComponent),
         children: [
           {
             path: ":id",
-            element: <Album />,
+            element: SuspenseComponent(AlbumComponent),
           },
         ],
       },
       {
         path: "/search",
-        element: <Search />,
+        element: SuspenseComponent(SearchComponent),
       },
       {
         path: "album/:id",
-        element: <Album />,
+        element: SuspenseComponent(AlbumComponent),
       },
       // Not found routes work as you'd expect
       { path: "*", element: <Navigate to="/recommend" /> },
