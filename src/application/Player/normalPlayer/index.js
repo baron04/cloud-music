@@ -7,7 +7,7 @@ import {
   Bottom,
   Operators,
   CDWrapper,
-  ProgressWrapper
+  ProgressWrapper,
 } from "./style";
 import { CSSTransition } from "react-transition-group";
 
@@ -18,22 +18,16 @@ import ProgressBar from "../../../baseUI/progress-bar";
 const transform = prefixStyle("transform");
 
 function NormalPlayer(props) {
-  const {
-    song,
-    fullScreen,
-    playing,
-    percent,
-    duration,
-    currentTime,
-    mode
-  } = props;
+  const { song, fullScreen, playing, percent, duration, currentTime, mode } =
+    props;
   const {
     toggleFullScreen,
     clickPlaying,
     onProgressChange,
     handlePrev,
     handleNext,
-    changeMode
+    changeMode,
+    togglePlayList,
   } = props;
 
   const normalPlayerRef = useRef();
@@ -45,22 +39,22 @@ function NormalPlayer(props) {
     const { x, y, scale } = _getPosAndScale(); // 获取 miniPlayer 图片中心相对 normalPlayer 唱片中心的偏移
     let animation = {
       0: {
-        transform: `translate3d(${x}px, ${y}px, 0) scale(${scale})`
+        transform: `translate3d(${x}px, ${y}px, 0) scale(${scale})`,
       },
       60: {
-        transform: `translate3d(0, 0, 0) scale(1.1)`
+        transform: `translate3d(0, 0, 0) scale(1.1)`,
       },
       100: {
-        transform: `translate3d(0, 0, 0) scale(1)`
-      }
+        transform: `translate3d(0, 0, 0) scale(1)`,
+      },
     };
     animations.registerAnimation({
       name: "move",
       animation,
       presets: {
         duration: 400,
-        easing: "linear"
-      }
+        easing: "linear",
+      },
     });
     animations.runAnimation(cdWrapperRef.current, "move");
   };
@@ -79,7 +73,7 @@ function NormalPlayer(props) {
     return {
       x,
       y,
-      scale
+      scale,
     };
   };
 
@@ -185,16 +179,16 @@ function NormalPlayer(props) {
             <div className="icon i-center">
               <i
                 className="iconfont"
-                onClick={e => clickPlaying(e, !playing)}
+                onClick={(e) => clickPlaying(e, !playing)}
                 dangerouslySetInnerHTML={{
-                  __html: playing ? "&#xe723;" : "&#xe731;"
+                  __html: playing ? "&#xe723;" : "&#xe731;",
                 }}
               ></i>
             </div>
             <div className="icon i-right" onClick={handleNext}>
               <i className="iconfont">&#xe718;</i>
             </div>
-            <div className="icon i-right">
+            <div className="icon i-right" onClick={() => togglePlayList(true)}>
               <i className="iconfont">&#xe640;</i>
             </div>
           </Operators>

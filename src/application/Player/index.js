@@ -15,6 +15,7 @@ import { playMode } from "../../api/config";
 import MiniPlayer from "./miniPlayer";
 import NormalPlayer from "./normalPlayer";
 import Toast from "./../../baseUI/toast/index";
+import PlayList from "./play-list";
 
 function Player(props) {
   const {
@@ -33,6 +34,7 @@ function Player(props) {
     changeCurrentDispatch,
     changePlayListDispatch, //改变playList
     changeModeDispatch, //改变mode
+    togglePlayListDispatch,
   } = props;
 
   const playList = immutablePlayList.toJS();
@@ -184,6 +186,7 @@ function Player(props) {
           playing={playing}
           clickPlaying={clickPlaying}
           percent={percent}
+          togglePlayList={togglePlayListDispatch}
         />
       )}
       {isEmptyObject(currentSong) ? null : (
@@ -201,6 +204,7 @@ function Player(props) {
           handleNext={handleNext}
           mode={mode}
           changeMode={changeMode}
+          togglePlayList={togglePlayListDispatch}
         />
       )}
       <audio
@@ -209,6 +213,7 @@ function Player(props) {
         onEnded={handleEnd}
       ></audio>
       <Toast text={modeText} ref={toastRef}></Toast>
+      <PlayList />
     </div>
   );
 }
