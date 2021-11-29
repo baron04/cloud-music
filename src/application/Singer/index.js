@@ -5,7 +5,7 @@ import {
   ImgWrapper,
   CollectButton,
   SongListWrapper,
-  BgLayer
+  BgLayer,
 } from "./style";
 import Header from "../../baseUI/header/index";
 import Scroll from "../../baseUI/scroll";
@@ -55,14 +55,19 @@ function Singer(props) {
     setShowStatus(false);
   }, []);
 
-  const { artist: immutableArtist, songs: immutableSongs, loading } = props;
+  const {
+    artist: immutableArtist,
+    songs: immutableSongs,
+    loading,
+    songsCount,
+  } = props;
 
   const { getSingerDataDispatch } = props;
 
   const artist = immutableArtist.toJS();
   const songs = immutableSongs.toJS();
 
-  const handleScroll = useCallback(pos => {
+  const handleScroll = useCallback((pos) => {
     let height = initialHeight.current;
     const newY = pos.y;
     const imageDOM = imageWrapper.current;
@@ -117,7 +122,7 @@ function Singer(props) {
       unmountOnExit
       onExited={() => navigate(-1)}
     >
-      <Container>
+      <Container play={songsCount}>
         <Header
           ref={header}
           handleClick={setShowStatusFalse}
@@ -148,18 +153,19 @@ function Singer(props) {
 }
 
 // 映射 Redux 全局的 state 到组件的 props 上
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   artist: state.getIn(["singerInfo", "artist"]),
   songs: state.getIn(["singerInfo", "songsOfArtist"]),
-  loading: state.getIn(["singerInfo", "loading"])
+  loading: state.getIn(["singerInfo", "loading"]),
+  songsCount: state.getIn(["player", "playList"]).size,
 });
 // 映射 dispatch 到 props 上
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     getSingerDataDispatch(id) {
       dispatch(changeEnterLoading(true));
       dispatch(getSingerInfo(id));
-    }
+    },
   };
 };
 

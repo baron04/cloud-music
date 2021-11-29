@@ -7,7 +7,7 @@ import {
   changeCurrentSong,
   changePlayList,
   changePlayMode,
-  changeFullScreen
+  changeFullScreen,
 } from "./store/actionCreators";
 import { getSongUrl, isEmptyObject, shuffle, findIndex } from "../../api/utils";
 import { playMode } from "../../api/config";
@@ -24,7 +24,7 @@ function Player(props) {
     currentSong: immutableCurrentSong,
     playList: immutablePlayList,
     mode, //播放模式
-    sequencePlayList: immutableSequencePlayList //顺序列表
+    sequencePlayList: immutableSequencePlayList, //顺序列表
   } = props;
   const {
     toggleFullScreenDispatch,
@@ -32,7 +32,7 @@ function Player(props) {
     changeCurrentIndexDispatch,
     changeCurrentDispatch,
     changePlayListDispatch, //改变playList
-    changeModeDispatch //改变mode
+    changeModeDispatch, //改变mode
   } = props;
 
   const playList = immutablePlayList.toJS();
@@ -49,20 +49,32 @@ function Player(props) {
   //记录当前的歌曲，以便于下次重渲染时比对是否是一首歌
   const [preSong, setPreSong] = useState({});
 
+  const songReady = useRef(true);
   useEffect(() => {
     if (
       !playList.length ||
       currentIndex === -1 ||
       !playList[currentIndex] ||
-      playList[currentIndex].id === preSong.id
+      playList[currentIndex].id === preSong.id ||
+      !songReady.current // 标志位为 false
     )
       return;
     let current = playList[currentIndex];
+    songReady.current = false; // 把标志位置为 false, 表示现在新的资源没有缓冲完成，不能切歌
     changeCurrentDispatch(current); //赋值currentSong
     setPreSong(current);
     audioRef.current.src = getSongUrl(current.id);
     setTimeout(() => {
-      audioRef.current.play();
+      // 注意，play 方法返回的是一个 promise 对象
+      audioRef.current
+        .play()
+        .then(() => {
+          songReady.current = true;
+        })
+        .catch(() => {
+          console.error("播放出错");
+          songReady.current = true;
+        });
     });
     togglePlayingDispatch(true); //播放状态
     setCurrentTime(0); //从头开始播放
@@ -83,11 +95,11 @@ function Player(props) {
     togglePlayingDispatch(state);
   };
 
-  const updateTime = e => {
+  const updateTime = (e) => {
     setCurrentTime(e.target.currentTime);
   };
 
-  const onProgressChange = curPercent => {
+  const onProgressChange = (curPercent) => {
     const newTime = curPercent * duration;
     setCurrentTime(newTime);
     audioRef.current.currentTime = newTime;
@@ -202,7 +214,7 @@ function Player(props) {
 }
 
 // 映射 Redux 全局的 state 到组件的 props 上
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   fullScreen: state.getIn(["player", "fullScreen"]),
   playing: state.getIn(["player", "playing"]),
   currentSong: state.getIn(["player", "currentSong"]),
@@ -210,11 +222,11 @@ const mapStateToProps = state => ({
   mode: state.getIn(["player", "mode"]),
   currentIndex: state.getIn(["player", "currentIndex"]),
   playList: state.getIn(["player", "playList"]),
-  sequencePlayList: state.getIn(["player", "sequencePlayList"])
+  sequencePlayList: state.getIn(["player", "sequencePlayList"]),
 });
 
 // 映射 dispatch 到 props 上
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     togglePlayingDispatch(data) {
       dispatch(changePlayingState(data));
@@ -236,7 +248,7 @@ const mapDispatchToProps = dispatch => {
     },
     changePlayListDispatch(data) {
       dispatch(changePlayList(data));
-    }
+    },
   };
 };
 

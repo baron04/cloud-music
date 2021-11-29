@@ -28,7 +28,11 @@ function Album(props) {
 
   const params = useParams();
   const id = params.id;
-  const { currentAlbum: currentAlbumImmutable, enterLoading } = props;
+  const {
+    currentAlbum: currentAlbumImmutable,
+    enterLoading,
+    songsCount,
+  } = props;
   const { getAlbumDataDispatch } = props;
 
   useEffect(() => {
@@ -38,7 +42,7 @@ function Album(props) {
   const currentAlbum = currentAlbumImmutable.toJS();
 
   const handleScroll = useCallback(
-    pos => {
+    (pos) => {
       let minScrollY = -HEADER_HEIGHT;
       let percent = Math.abs(pos.y / minScrollY);
       let headerDom = headerEl.current;
@@ -126,7 +130,7 @@ function Album(props) {
       unmountOnExit
       onExited={() => navigate(-1)}
     >
-      <Container>
+      <Container play={songsCount}>
         <Header
           ref={headerEl}
           title={title}
@@ -158,17 +162,18 @@ function Album(props) {
 }
 
 // 映射 Redux 全局的 state 到组件的 props 上
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   currentAlbum: state.getIn(["album", "currentAlbum"]),
-  enterLoading: state.getIn(["album", "enterLoading"])
+  enterLoading: state.getIn(["album", "enterLoading"]),
+  songsCount: state.getIn(["player", "playList"]).size,
 });
 // 映射 dispatch 到 props 上
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     getAlbumDataDispatch(id) {
       dispatch(changeEnterLoading(true));
       dispatch(getAlbumList(id));
-    }
+    },
   };
 };
 

@@ -1,7 +1,7 @@
-import styled from'styled-components';
-import style from '../../assets/global-style';
+import styled from "styled-components";
+import style from "../../assets/global-style";
 
-export const NavContainer  = styled.div`
+export const NavContainer = styled.div`
   box-sizing: border-box;
   position: fixed;
   top: 95px;
@@ -14,7 +14,7 @@ export const ListContainer = styled.div`
   position: fixed;
   top: 160px;
   left: 0;
-  bottom: 0;
+  bottom: ${(props) => (props.play > 0 ? "60px" : 0)};
   overflow: hidden;
   width: 100%;
 `;
@@ -25,7 +25,7 @@ export const List = styled.div`
   flex-direction: column;
   overflow: hidden;
   .title {
-    margin:10px 0 10px 10px;
+    margin: 10px 0 10px 10px;
     color: ${style["font-color-desc"]};
     font-size: ${style["font-size-s"]};
   }

@@ -10,7 +10,7 @@ import { useNavigate, Routes, Route } from "react-router-dom";
 import Album from "../Album";
 
 function Rank(props) {
-  const { rankList: list, loading } = props;
+  const { rankList: list, loading, songsCount } = props;
 
   const { getRankListDataDispatch } = props;
 
@@ -26,7 +26,7 @@ function Rank(props) {
 
   let navigate = useNavigate();
 
-  const enterDetail = detail => {
+  const enterDetail = (detail) => {
     // const idx = filterIdx(detail.name);
     // if (idx === null) {
     //   console.log("暂无相关数据");
@@ -59,7 +59,7 @@ function Rank(props) {
     );
   };
 
-  const renderSongList = list => {
+  const renderSongList = (list) => {
     return list.length ? (
       <SongList>
         {list.map((item, index) => {
@@ -77,7 +77,7 @@ function Rank(props) {
   let displayStyle = loading ? { display: "none" } : { display: "" };
 
   return (
-    <Container>
+    <Container play={songsCount}>
       <Scroll>
         <div>
           <h1 className="offical" style={displayStyle}>
@@ -103,16 +103,17 @@ function Rank(props) {
 }
 
 // 映射 Redux 全局的 state 到组件的 props 上
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   rankList: state.getIn(["rank", "rankList"]),
-  loading: state.getIn(["rank", "loading"])
+  loading: state.getIn(["rank", "loading"]),
+  songsCount: state.getIn(["player", "playList"]).size,
 });
 // 映射 dispatch 到 props 上
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     getRankListDataDispatch() {
       dispatch(getRankList());
-    }
+    },
   };
 };
 
