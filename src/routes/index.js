@@ -7,6 +7,7 @@ import Singers from "../application/Singers";
 import Rank from "../application/Rank";
 import Album from "../application/Album";
 import Singer from "../application/Singer";
+import Search from "../application/Search";
 
 const routes = [
   // These are the same as the props you provide to <Route>
@@ -21,9 +22,9 @@ const routes = [
         children: [
           {
             path: ":id",
-            element: <Album />
-          }
-        ]
+            element: <Album />,
+          },
+        ],
       },
       {
         path: "singers/*",
@@ -31,9 +32,9 @@ const routes = [
         routes: [
           {
             path: "/singers/:id",
-            component: Singer
-          }
-        ]
+            component: Singer,
+          },
+        ],
       },
       {
         path: "rank/*",
@@ -41,14 +42,18 @@ const routes = [
         children: [
           {
             path: ":id",
-            element: <Album />
-          }
-        ]
+            element: <Album />,
+          },
+        ],
+      },
+      {
+        path: "/search",
+        element: <Search />,
       },
       // Not found routes work as you'd expect
-      { path: "*", element: <Navigate to="/recommend" /> }
-    ]
-  }
+      { path: "*", element: <Navigate to="/recommend" /> },
+    ],
+  },
 ];
 
 export default routes;
