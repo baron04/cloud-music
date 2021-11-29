@@ -17,6 +17,7 @@ import NormalPlayer from "./normalPlayer";
 import Toast from "./../../baseUI/toast/index";
 import PlayList from "./play-list";
 
+import Lyric from './../../api/lyric-parser';
 import { getLyricRequest } from "../../api/request";
 
 function Player(props) {
@@ -55,17 +56,32 @@ function Player(props) {
 
   const songReady = useRef(true);
 
+  const [currentPlayingLyric, setPlayingLyric] = useState("");
+  const currentLineNum = useRef(0);
   const currentLyric = useRef();
+  const handleLyric = ({ lineNum, txt }) => {
+    if (!currentLyric.current) return;
+    currentLineNum.current = lineNum;
+    setPlayingLyric(txt);
+  };
+  if (currentLyric.current) {
+    currentLyric.current.stop();
+  }
+  // 避免 songReady 恒为 false 的情况
   const getLyric = (id) => {
     let lyric = "";
     getLyricRequest(id)
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         lyric = data.lrc.lyric;
         if (!lyric) {
           currentLyric.current = null;
           return;
         }
+        currentLyric.current = new Lyric(lyric, handleLyric);
+        currentLyric.current.play();
+        currentLineNum.current = 0;
+        currentLyric.current.seek(0);
       })
       .catch(() => {
         songReady.current = true;
@@ -117,6 +133,9 @@ function Player(props) {
   const clickPlaying = (e, state) => {
     e.stopPropagation();
     togglePlayingDispatch(state);
+    if (currentLyric.current) {
+      currentLyric.current.togglePlay(currentTime * 1000);
+    }
   };
 
   const updateTime = (e) => {
@@ -129,6 +148,9 @@ function Player(props) {
     audioRef.current.currentTime = newTime;
     if (!playing) {
       togglePlayingDispatch(true);
+    }
+    if (currentLyric.current) {
+      currentLyric.current.seek(newTime * 1000);
     }
   };
 
@@ -227,6 +249,9 @@ function Player(props) {
           mode={mode}
           changeMode={changeMode}
           togglePlayList={togglePlayListDispatch}
+          currentLyric={currentLyric.current}
+          currentPlayingLyric={currentPlayingLyric}
+          currentLineNum={currentLineNum.current}
         />
       )}
       <audio
