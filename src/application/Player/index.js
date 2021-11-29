@@ -17,6 +17,8 @@ import NormalPlayer from "./normalPlayer";
 import Toast from "./../../baseUI/toast/index";
 import PlayList from "./play-list";
 
+import { getLyricRequest } from "../../api/request";
+
 function Player(props) {
   const {
     fullScreen,
@@ -52,6 +54,25 @@ function Player(props) {
   const [preSong, setPreSong] = useState({});
 
   const songReady = useRef(true);
+
+  const currentLyric = useRef();
+  const getLyric = (id) => {
+    let lyric = "";
+    getLyricRequest(id)
+      .then((data) => {
+        console.log(data);
+        lyric = data.lrc.lyric;
+        if (!lyric) {
+          currentLyric.current = null;
+          return;
+        }
+      })
+      .catch(() => {
+        songReady.current = true;
+        audioRef.current.play();
+      });
+  };
+
   useEffect(() => {
     if (
       !playList.length ||
@@ -79,6 +100,7 @@ function Player(props) {
         });
     });
     togglePlayingDispatch(true); //播放状态
+    getLyric(current.id);
     setCurrentTime(0); //从头开始播放
     setDuration((current.dt / 1000) | 0); //时长
 

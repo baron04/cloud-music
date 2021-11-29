@@ -8,46 +8,51 @@ import {
   SET_CURRENT_INDEX,
   SET_SHOW_PLAYLIST,
   DELETE_SONG,
-  INSERT_SONG
+  INSERT_SONG,
 } from "./constants";
 import { fromJS } from "immutable";
 
-export const changeCurrentSong = data => ({
+export const changeCurrentSong = (data) => ({
   type: SET_CURRENT_SONG,
-  data: fromJS(data)
+  data: fromJS(data),
 });
 
-export const changeFullScreen = data => ({
+export const changeFullScreen = (data) => ({
   type: SET_FULL_SCREEN,
-  data
+  data,
 });
 
-export const changePlayingState = data => ({
+export const changePlayingState = (data) => ({
   type: SET_PLAYING_STATE,
-  data
+  data,
 });
 
-export const changeSequecePlayList = data => ({
+export const changeSequecePlayList = (data) => ({
   type: SET_SEQUENCE_PLAYLIST,
-  data: fromJS(data)
+  data: fromJS(data),
 });
 
-export const changePlayList = data => ({
+export const changePlayList = (data) => ({
   type: SET_PLAYLIST,
-  data: fromJS(data)
+  data: fromJS(data),
 });
 
-export const changePlayMode = data => ({
+export const changePlayMode = (data) => ({
   type: SET_PLAY_MODE,
-  data
+  data,
 });
 
-export const changeCurrentIndex = data => ({
+export const changeCurrentIndex = (data) => ({
   type: SET_CURRENT_INDEX,
-  data
+  data,
 });
 
-export const changeShowPlayList = data => ({
+export const changeShowPlayList = (data) => ({
   type: SET_SHOW_PLAYLIST,
-  data
+  data,
+});
+
+export const deleteSong = (data) => ({
+  type: DELETE_SONG,
+  data,
 });
